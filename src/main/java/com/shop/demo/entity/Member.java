@@ -15,8 +15,7 @@ import jakarta.persistence.*;
 @ToString
 public class Member extends BaseEntity {
 
-  @Id
-  @Column(name="member_id")
+  @Id @Column(name="member_id")
   @GeneratedValue(strategy = GenerationType.AUTO)
   private Long id;
 
@@ -45,5 +44,4 @@ public class Member extends BaseEntity {
 
     return member;
   }
-
 }

@@ -34,10 +34,8 @@ public class SecurityConfig {
         ).logout( logoutCustomizer -> logoutCustomizer
             .logoutRequestMatcher(new AntPathRequestMatcher("/members/logout"))
             .logoutSuccessUrl("/")
-
         )
-        .build()
-        ;
+        .build();
   }
 
   @Bean
