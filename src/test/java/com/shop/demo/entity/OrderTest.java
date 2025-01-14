@@ -3,6 +3,7 @@ package com.shop.demo.entity;
 import com.shop.demo.constant.ItemSellStatus;
 import com.shop.demo.repository.ItemRepository;
 import com.shop.demo.repository.MemberRepository;
+import com.shop.demo.repository.OrderItemRepository;
 import com.shop.demo.repository.OrderRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,8 +34,8 @@ class OrderTest {
   @Autowired
   MemberRepository memberRepository;
 
-//  @Autowired
-//  OrderItemRepository orderItemRepository;
+  @Autowired
+  OrderItemRepository orderItemRepository;
 
   @Test
   @DisplayName("영속성 전이 테스트")
@@ -69,6 +70,23 @@ class OrderTest {
     Order order = this.createOrder();
     order.getOrderItems().remove(0);
     em.flush();
+  }
+
+  @Test
+  @DisplayName("지연 로딩 테스트")
+  public void lazyLoadingTest(){
+    Order order = this.createOrder();
+    Long orderItemId = order.getOrderItems().get(0).getId();
+    em.flush();
+    em.clear();
+
+    OrderItem orderItem = orderItemRepository.findById(orderItemId)
+        .orElseThrow(EntityNotFoundException::new);
+
+    System.out.println("Order class : " + orderItem.getOrder().getClass());
+    System.out.println("===========================");
+    orderItem.getOrder().getOrderDate();
+    System.out.println("===========================");
   }
 
   public Order createOrder(){
@@ -106,20 +124,5 @@ class OrderTest {
 
     return item;
   }
-
-//  @Test
-//  @DisplayName("지연 로딩 테스트")
-//  public void lazyLoadingTest(){
-//    Order order = this.createOrder();
-//    Long orderItemId = order.getOrderItems().get(0).getId();
-//    em.flush();
-//    em.clear();
-//    OrderItem orderItem = orderItemRepository.findById(orderItemId)
-//        .orElseThrow(EntityNotFoundException::new);
-//    System.out.println("Order class : " + orderItem.getOrder().getClass());
-//    System.out.println("===========================");
-//    orderItem.getOrder().getOrderDate();
-//    System.out.println("===========================");
-//  }
 
 }
