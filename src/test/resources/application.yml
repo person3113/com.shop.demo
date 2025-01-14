@@ -1,6 +1,10 @@
 spring:
   profiles:
     active: test
+  servlet:
+    multipart:
+      max-file-size: 20MB # 파일 하나당 최대 크기
+      max-request-size: 100MB # 요청당 최대 크기
 #  datasource:
 #    url: jdbc:h2:mem:testdb
 #    username: sa
@@ -18,3 +22,6 @@ spring:
 logging.level:
   org.hibernate.SQL: debug
 #  org.hibernate.orm.jdbc.bind: trace #스프링 부트 3.x, hibernate6
+
+itemImgLocation: C:\shop\item
+uploadPath: file:\\\C:\shop\
