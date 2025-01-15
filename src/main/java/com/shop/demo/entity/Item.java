@@ -1,6 +1,7 @@
 package com.shop.demo.entity;
 
 import com.shop.demo.constant.ItemSellStatus;
+import com.shop.demo.dto.ItemFormDto;
 import com.shop.demo.exception.OutOfStockException;
 import lombok.Getter;
 import lombok.Setter;
@@ -35,14 +36,14 @@ public class Item extends BaseEntity {
   @Enumerated(EnumType.STRING)
   private ItemSellStatus itemSellStatus; //상품 판매 상태
 
-//  public void updateItem(ItemFormDto itemFormDto){
-//    this.itemNm = itemFormDto.getItemNm();
-//    this.price = itemFormDto.getPrice();
-//    this.stockNumber = itemFormDto.getStockNumber();
-//    this.itemDetail = itemFormDto.getItemDetail();
-//    this.itemSellStatus = itemFormDto.getItemSellStatus();
-//  }
-//
+  public void updateItem(ItemFormDto itemFormDto){
+    this.itemNm = itemFormDto.getItemNm();
+    this.price = itemFormDto.getPrice();
+    this.stockNumber = itemFormDto.getStockNumber();
+    this.itemDetail = itemFormDto.getItemDetail();
+    this.itemSellStatus = itemFormDto.getItemSellStatus();
+  }
+
   public void removeStock(int stockNumber){
     int restStock = this.stockNumber - stockNumber;
     if(restStock<0){
