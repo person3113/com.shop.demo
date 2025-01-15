@@ -20,6 +20,6 @@ logging.level:
 #  org.hibernate.orm.jdbc.bind: trace #스프링 부트 3.x, hibernate6
 
 #상품 이미지 업로드 경로
-itemImgLocation: C:\shop\item
+itemImgLocation: C:/shop/item
 #리소스 업로드 경로
-uploadPath: file:\\\C:\shop\
+uploadPath: file:///C:/shop/

@@ -5,6 +5,8 @@ import com.querydsl.core.types.dsl.Wildcard;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.shop.demo.constant.ItemSellStatus;
 import com.shop.demo.dto.ItemSearchDto;
+import com.shop.demo.dto.MainItemDto;
+import com.shop.demo.dto.QMainItemDto;
 import com.shop.demo.entity.Item;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -16,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static com.shop.demo.entity.QItem.*;
+import static com.shop.demo.entity.QItemImg.itemImg;
 
 public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
 
@@ -78,6 +81,44 @@ public class ItemRepositoryCustomImpl implements ItemRepositoryCustom{
             searchSellStatusEq(itemSearchDto.getSearchSellStatus()),
             searchByLike(itemSearchDto.getSearchBy(),
                 itemSearchDto.getSearchQuery()))
+        .fetchOne();
+
+    return new PageImpl<>(content, pageable, total);
+  }
+
+  private BooleanExpression itemNmLike(String searchQuery){
+    return StringUtils.isEmpty(searchQuery) ? null : item.itemNm.like("%" + searchQuery + "%");
+  }
+
+  @Override
+  public Page<MainItemDto> getMainItemPage(ItemSearchDto itemSearchDto, Pageable pageable) {
+//    QItem item = QItem.item;
+//    QItemImg itemImg = QItemImg.itemImg;
+
+    List<MainItemDto> content = queryFactory
+        .select(
+            new QMainItemDto(
+                item.id,
+                item.itemNm,
+                item.itemDetail,
+                itemImg.imgUrl,
+                item.price)
+        )
+        .from(itemImg)
+        .join(itemImg.item, item)
+        .where(itemImg.repimgYn.eq("Y"))
+        .where(itemNmLike(itemSearchDto.getSearchQuery()))
+        .orderBy(item.id.desc())
+        .offset(pageable.getOffset())
+        .limit(pageable.getPageSize())
+        .fetch();
+
+    long total = queryFactory
+        .select(Wildcard.count)
+        .from(itemImg)
+        .join(itemImg.item, item)
+        .where(itemImg.repimgYn.eq("Y"))
+        .where(itemNmLike(itemSearchDto.getSearchQuery()))
         .fetchOne();
 
     return new PageImpl<>(content, pageable, total);
