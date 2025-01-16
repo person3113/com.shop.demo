@@ -1,6 +1,7 @@
 package com.shop.demo.service;
 
 import com.shop.demo.constant.ItemSellStatus;
+import com.shop.demo.constant.OrderStatus;
 import com.shop.demo.dto.OrderDto;
 import com.shop.demo.entity.Item;
 import com.shop.demo.entity.Member;
@@ -77,4 +78,22 @@ class OrderServiceTest {
     return memberRepository.save(member);
   }
 
+  @Test
+  @DisplayName("주문 취소 테스트")
+  public void cancelOrder(){
+    Item item = saveItem();
+    Member member = saveMember();
+
+    OrderDto orderDto = new OrderDto();
+    orderDto.setCount(10);
+    orderDto.setItemId(item.getId());
+    Long orderId = orderService.order(orderDto, member.getEmail());
+
+    Order order = orderRepository.findById(orderId)
+        .orElseThrow(EntityNotFoundException::new);
+    orderService.cancelOrder(orderId);
+
+    assertEquals(OrderStatus.CANCEL, order.getOrderStatus());
+    assertEquals(100, item.getStockNumber());
+  }
 }
