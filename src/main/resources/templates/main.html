@@ -52,7 +52,7 @@
       <div class="col-md-4 margin">
         <div class="card">
           <a th:href="'/item/' +${item.id}" class="text-dark">
-            <img th:src="${item.imgUrl}" class="card-img-top" th:alt="${item.itemNm}">
+            <img th:src="${item.imgUrl}" class="card-img-top" th:alt="${item.itemNm}" height="400">
             <div class="card-body">
               <h4 class="card-title">[[${item.itemNm}]]</h4>
               <p class="card-text">[[${item.itemDetail}]]</p>

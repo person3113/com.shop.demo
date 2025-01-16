@@ -1,6 +1,13 @@
 spring:
   profiles:
     active: test
+  jpa:
+    properties:
+      hibernate:
+#        show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 1000
+        use_sql_comments: true # QueryDsl 실행 쿼리를 jpql로도 보고 싶을 때
   servlet:
     multipart:
       max-file-size: 20MB # 파일 하나당 최대 크기
