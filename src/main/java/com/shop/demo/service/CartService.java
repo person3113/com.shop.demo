@@ -2,6 +2,8 @@ package com.shop.demo.service;
 
 import com.shop.demo.dto.CartDetailDto;
 import com.shop.demo.dto.CartItemDto;
+import com.shop.demo.dto.CartOrderDto;
+import com.shop.demo.dto.OrderDto;
 import com.shop.demo.entity.Cart;
 import com.shop.demo.entity.CartItem;
 import com.shop.demo.entity.Item;
@@ -14,10 +16,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import jakarta.persistence.EntityNotFoundException;
-import org.thymeleaf.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.thymeleaf.util.StringUtils;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +31,7 @@ public class CartService {
   private final MemberRepository memberRepository;
   private final CartRepository cartRepository;
   private final CartItemRepository cartItemRepository;
+  private final OrderService orderService;
 
   public Long addCart(CartItemDto cartItemDto, String email){
 
@@ -94,4 +98,30 @@ public class CartService {
         .orElseThrow(EntityNotFoundException::new);
     cartItemRepository.delete(cartItem);
   }
+
+  public Long orderCartItem(List<CartOrderDto> cartOrderDtoList, String email){
+    List<OrderDto> orderDtoList = new ArrayList<>();
+
+    for (CartOrderDto cartOrderDto : cartOrderDtoList) {
+      CartItem cartItem = cartItemRepository
+          .findById(cartOrderDto.getCartItemId())
+          .orElseThrow(EntityNotFoundException::new);
+
+      OrderDto orderDto = new OrderDto();
+      orderDto.setItemId(cartItem.getItem().getId());
+      orderDto.setCount(cartItem.getCount());
+      orderDtoList.add(orderDto);
+    }
+
+    Long orderId = orderService.orders(orderDtoList, email);
+    for (CartOrderDto cartOrderDto : cartOrderDtoList) {
+      CartItem cartItem = cartItemRepository
+          .findById(cartOrderDto.getCartItemId())
+          .orElseThrow(EntityNotFoundException::new);
+      cartItemRepository.delete(cartItem);
+    }
+
+    return orderId;
+  }
+
 }
