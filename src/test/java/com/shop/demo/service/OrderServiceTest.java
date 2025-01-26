@@ -80,7 +80,7 @@ class OrderServiceTest {
 
   @Test
   @DisplayName("주문 취소 테스트")
-  public void cancelOrder(){
+  void cancelOrder(){
     Item item = saveItem();
     Member member = saveMember();
 

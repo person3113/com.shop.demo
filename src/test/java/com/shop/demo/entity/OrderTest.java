@@ -39,7 +39,7 @@ class OrderTest {
 
   @Test
   @DisplayName("영속성 전이 테스트")
-  public void cascadeTest() {
+  void cascadeTest() {
 
     Order order = new Order();
 
@@ -66,7 +66,7 @@ class OrderTest {
 
   @Test
   @DisplayName("고아객체 제거 테스트")
-  public void orphanRemovalTest(){
+  void orphanRemovalTest(){
     Order order = this.createOrder();
     order.getOrderItems().remove(0);
     em.flush();
@@ -74,7 +74,7 @@ class OrderTest {
 
   @Test
   @DisplayName("지연 로딩 테스트")
-  public void lazyLoadingTest(){
+  void lazyLoadingTest(){
     Order order = this.createOrder();
     Long orderItemId = order.getOrderItems().get(0).getId();
     em.flush();
@@ -89,7 +89,7 @@ class OrderTest {
     System.out.println("===========================");
   }
 
-  public Order createOrder(){
+  Order createOrder(){
     Order order = new Order();
 
     for(int i=0;i<3;i++){
@@ -111,7 +111,7 @@ class OrderTest {
     return order;
   }
 
-  public Item createItem(){
+  Item createItem(){
     Item item = new Item();
 
     item.setItemNm("테스트 상품");

@@ -109,7 +109,7 @@ class ItemRepositoryTest {
 
   @Test
   @DisplayName("@Query를 이용한 상품 조회 테스트")
-  public void findByItemDetailTest(){
+  void findByItemDetailTest(){
     //given
     createItemList();
 
@@ -122,7 +122,7 @@ class ItemRepositoryTest {
 
   @Test
   @DisplayName("Querydsl 조회 테스트1")
-  public void queryDslTest(){
+  void queryDslTest(){
     //given
     createItemList();
     JPAQueryFactory queryFactory = new JPAQueryFactory(em);
